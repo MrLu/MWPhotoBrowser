@@ -10,8 +10,9 @@
 #import "MWPhotoProtocol.h"
 #import "MWTapDetectingImageView.h"
 #import "MWTapDetectingView.h"
+#import "PhotoBrowserProtocol.h"
 
-@class MWPhotoBrowser, MWPhoto, MWCaptionView;
+@class MWPhoto, MWCaptionView;
 
 @interface MWZoomingScrollView : UIScrollView <UIScrollViewDelegate, MWTapDetectingImageViewDelegate, MWTapDetectingViewDelegate> {
 
@@ -23,7 +24,7 @@
 @property (nonatomic, weak) UIButton *selectedButton;
 @property (nonatomic, weak) UIButton *playButton;
 
-- (id)initWithPhotoBrowser:(MWPhotoBrowser *)browser;
+- (id)initWithPhotoBrowser:(id<PhotoBrowserProtocol>) browser;
 - (void)displayImage;
 - (void)displayImageFailure;
 - (void)setMaxMinZoomScalesForCurrentBounds;

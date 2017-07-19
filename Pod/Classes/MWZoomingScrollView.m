@@ -17,7 +17,7 @@
 // Private methods and properties
 @interface MWZoomingScrollView () {
     
-    MWPhotoBrowser __weak *_photoBrowser;
+    NSObject<PhotoBrowserProtocol> __weak *_photoBrowser;
 	MWTapDetectingView *_tapView; // for background taps
 	MWTapDetectingImageView *_photoImageView;
 	DACircularProgressView *_loadingIndicator;
@@ -29,7 +29,7 @@
 
 @implementation MWZoomingScrollView
 
-- (id)initWithPhotoBrowser:(MWPhotoBrowser *)browser {
+- (id)initWithPhotoBrowser:(id<PhotoBrowserProtocol>) browser {
     if ((self = [super init])) {
         
         // Setup
@@ -413,8 +413,11 @@
 }
 
 // Image View
-- (void)imageView:(UIImageView *)imageView singleTapDetected:(UITouch *)touch { 
-    [self handleSingleTap:[touch locationInView:imageView]];
+- (void)imageView:(UIImageView *)imageView singleTapDetected:(UITouch *)touch {
+    if ([_photoBrowser respondsToSelector:@selector(photoBrowserImageHandleSingleTap)]) {
+        [_photoBrowser performSelector:@selector(photoBrowserImageHandleSingleTap) withObject:nil afterDelay:0.2];
+    } else
+        [self handleSingleTap:[touch locationInView:imageView]];
 }
 - (void)imageView:(UIImageView *)imageView doubleTapDetected:(UITouch *)touch {
     [self handleDoubleTap:[touch locationInView:imageView]];
@@ -429,7 +432,11 @@
     touchY *= 1/self.zoomScale;
     touchX += self.contentOffset.x;
     touchY += self.contentOffset.y;
-    [self handleSingleTap:CGPointMake(touchX, touchY)];
+    if ([_photoBrowser respondsToSelector:@selector(photoBrowserViewHandleSingleTap)]) {
+        [_photoBrowser performSelector:@selector(photoBrowserViewHandleSingleTap) withObject:nil afterDelay:0.2];
+    } else {
+        [self handleSingleTap:CGPointMake(touchX, touchY)];
+    }
 }
 - (void)view:(UIView *)view doubleTapDetected:(UITouch *)touch {
     // Translate touch location to image view location
@@ -439,7 +446,11 @@
     touchY *= 1/self.zoomScale;
     touchX += self.contentOffset.x;
     touchY += self.contentOffset.y;
-    [self handleDoubleTap:CGPointMake(touchX, touchY)];
+    if ([_photoBrowser respondsToSelector:@selector(photoBrowserViewHandleDoubleTap)]) {
+        [_photoBrowser photoBrowserViewHandleDoubleTap];
+    } else {
+        [self handleDoubleTap:CGPointMake(touchX, touchY)];
+    }
 }
 
 @end

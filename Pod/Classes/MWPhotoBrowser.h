@@ -10,6 +10,7 @@
 #import "MWPhoto.h"
 #import "MWPhotoProtocol.h"
 #import "MWCaptionView.h"
+#import "PhotoBrowserProtocol.h"
 
 // Debug Logging
 #if 0 // Set to 1 to enable debug logging
@@ -38,7 +39,7 @@
 
 @end
 
-@interface MWPhotoBrowser : UIViewController <UIScrollViewDelegate, UIActionSheetDelegate>
+@interface MWPhotoBrowser : UIViewController <UIScrollViewDelegate, UIActionSheetDelegate,PhotoBrowserProtocol>
 
 @property (nonatomic, weak) IBOutlet id<MWPhotoBrowserDelegate> delegate;
 @property (nonatomic) BOOL zoomPhotosToFill;
